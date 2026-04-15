@@ -1,0 +1,59 @@
+
+public class StatsCalculator {
+    public static void main(String[] args) {
+        double[] studentAverages = new double[sampleData.length];
+        System.out.println("--GradesBook Satistics--");
+        System.out.println("Student Averages:");
+        for (int i = 0; i < sampleData.length; i++) {
+            studentAverages[i] = calculateStudentAverage(sampleData[i]);
+            System.out.println("Student " + (i + 1) + ": " + studentAverages[i]);
+        }
+        calculateAssignmentAverge(sampleData);
+        findHighestScore(sampleData);
+    }
+    static double[][] sampleData = {
+            {85.5, 90.0, 78.5, 92.0},
+            {76.0, 88.5, 90.0, 85.0},
+            {95.0, 92.0, 94.5, 98.0},
+            {60.0, 70.5, 65.0, 72.0},
+            {82.0, 84.0, 80.0, 88.0}
+        };
+    
+    public static double calculateStudentAverage(double[] grades) {
+        double sum = 0;
+        for (double grade : grades) {
+            sum += grade;
+        }
+        return sum / grades.length;
+    }
+    public static double[] calculateAssignmentAverge (double[][] grades) {
+        double[] assignmentAverages = new double[grades[0].length];
+        System.out.println("Assignment Averages:");
+        for (int i = 0; i < grades[0].length; i++) {
+            double sum = 0;
+            for (double[] studentGrades : grades) {
+                sum += studentGrades[i];
+            }
+            assignmentAverages[i] = sum / grades.length;
+            System.out.println("Assignment " + (i + 1) + ": " + assignmentAverages[i]);
+        }
+        return assignmentAverages;
+    }
+    public static double findHighestScore(double[][] grades){
+        double highestScore = grades[0][0];
+        int studentIndex = 0;
+        int assignmentIndex = 0;
+
+        for (int i = 0; i < grades.length; i++){
+            for (int j = 0; j < grades[i].length; j++){
+                if (grades[i][j] > highestScore){
+                    highestScore = grades[i][j];
+                    studentIndex = i;
+                    assignmentIndex = j;
+                }
+            }
+        }
+        System.out.println("Highest Score in class: " + highestScore + " (Student " + (studentIndex + 1) + " on Assignment " + (assignmentIndex + 1) + ")");
+        return highestScore;
+    }
+}

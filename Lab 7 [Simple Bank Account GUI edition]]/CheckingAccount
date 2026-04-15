@@ -1,0 +1,22 @@
+public class CheckingAccount extends BankAccount {
+    private final double OVERDRAFT_FEE = 35.00;
+
+    public CheckingAccount(String accountHolder, double initialDeposit) {
+        super(accountHolder, initialDeposit);
+    }
+
+    @Override
+    public String withdraw(double amount) {
+        if (amount <= 0) return "Please enter a number greater than zero.";
+        
+        double currentBalance = getBalance();
+        setBalance(currentBalance - amount);
+
+        if (amount > currentBalance) {
+            setBalance(getBalance() - OVERDRAFT_FEE);
+            return "Overdraft fee applied! $35.00 fee applied to account. New Balance: $" + String.format("%.2f", getBalance());
+        }
+        
+        return "Withdrawal successful. New Balance: $" + String.format("%.2f", getBalance());
+    }
+}

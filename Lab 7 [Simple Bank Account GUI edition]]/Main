@@ -1,0 +1,92 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Main {
+    private static BankAccount account;
+    private static JLabel lblBalance;
+
+    public static void main(String[] args) {
+        try {
+            // Step 1: Account Initialization
+            String name = JOptionPane.showInputDialog("Please enter your name:");
+            if (name == null) System.exit(0);
+
+            String depositStr = JOptionPane.showInputDialog("Enter initial deposit:");
+            double initialDeposit = Double.parseDouble(depositStr);
+
+            String[] options = {"Checking", "Savings"};
+            int type = JOptionPane.showOptionDialog(null, "Select account type:", "Account Type",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+            if (type == 0) {
+                account = new CheckingAccount(name, initialDeposit);
+            } else {
+                account = new SavingsAccount(name, initialDeposit);
+            }
+
+            // Step 2: Load Main Dashboard
+            createAndShowGUI();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: Please enter a valid number.");
+            main(null); // Restart on error
+        }
+    }
+
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("Simple Bank App");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(350, 250);
+        frame.setLayout(new GridLayout(5, 1, 10, 10));
+
+        JLabel lblWelcome = new JLabel("Welcome, " + account.getAccountHolder() + "!", SwingConstants.CENTER);
+        lblBalance = new JLabel("Current Balance: $" + String.format("%.2f", account.getBalance()), SwingConstants.CENTER);
+        
+        JTextField txtAmount = new JTextField();
+        JPanel btnPanel = new JPanel();
+        
+        JButton btnDeposit = new JButton("Deposit");
+        JButton btnWithdraw = new JButton("Withdraw");
+        JButton btnExit = new JButton("Exit");
+
+        btnPanel.add(btnDeposit);
+        btnPanel.add(btnWithdraw);
+
+        frame.add(lblWelcome);
+        frame.add(lblBalance);
+        frame.add(new JLabel("Enter Amount:", SwingConstants.CENTER));
+        frame.add(txtAmount);
+        frame.add(btnPanel);
+        frame.add(btnExit);
+
+        // --- Button Actions ---
+
+        btnDeposit.addActionListener(e -> {
+            try {
+                double amt = Double.parseDouble(txtAmount.getText());
+                String msg = account.deposit(amt);
+                lblBalance.setText("Current Balance: $" + String.format("%.2f", account.getBalance()));
+                JOptionPane.showMessageDialog(frame, msg);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid number");
+            }
+        });
+
+        btnWithdraw.addActionListener(e -> {
+            try {
+                double amt = Double.parseDouble(txtAmount.getText());
+                String msg = account.withdraw(amt);
+                lblBalance.setText("Current Balance: $" + String.format("%.2f", account.getBalance()));
+                JOptionPane.showMessageDialog(frame, msg);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Please enter a valid number");
+            }
+        });
+
+        btnExit.addActionListener(e -> System.exit(0));
+
+        frame.setVisible(true);
+    }
+}

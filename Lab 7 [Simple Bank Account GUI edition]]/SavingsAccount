@@ -1,0 +1,17 @@
+public class SavingsAccount extends BankAccount {
+    public SavingsAccount(String accountHolder, double initialDeposit) {
+        super(accountHolder, initialDeposit);
+    }
+
+    @Override
+    public String withdraw(double amount) {
+        if (amount <= 0) return "Please enter a valid number greater than zero.";
+
+        if (amount > getBalance()) {
+            return "Transaction Denied: Insufficient funds. Balance remains: $" + String.format("%.2f", getBalance());
+        }
+
+        setBalance(getBalance() - amount);
+        return "Withdrawal successful. New Balance: $" + String.format("%.2f", getBalance());
+    }
+}

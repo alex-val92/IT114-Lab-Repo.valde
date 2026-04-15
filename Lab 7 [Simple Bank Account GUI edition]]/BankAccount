@@ -1,0 +1,32 @@
+public abstract class BankAccount {
+    private String accountHolder;
+    private double balance;
+
+    public BankAccount(String accountHolder, double initialDeposit) {
+        this.accountHolder = accountHolder;
+        this.balance = initialDeposit;
+    }
+
+    public String deposit(double amount) {
+        if (amount <= 0) {
+            return "Please enter a valid number (greater than 0).";
+        }
+        this.balance += amount;
+        return "Deposit completed!!! New Balance: $" + String.format("%.2f", balance);
+    }
+
+    public abstract String withdraw(double amount);
+
+    // --- GETTERS AND SETTERS ---
+    public String getAccountHolder() {
+        return accountHolder;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    protected void setBalance(double balance) {
+        this.balance = balance;
+    }
+}
